@@ -1,0 +1,1 @@
+Addressable = Npm.require('addressable');

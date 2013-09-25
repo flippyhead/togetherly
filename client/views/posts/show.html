@@ -1,0 +1,11 @@
+<template name="postsShow">
+  <h1>{{ url }}</h1>
+  <form>
+    <div class="form-group">
+      <input type="text" class="form-control" name="comment" placeholder="Write a comment..." autofocus></input>
+    </div>
+  </form>
+  {{#each comments }}
+    {{> commentsItem }}
+  {{/each }}
+</template>

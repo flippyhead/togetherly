@@ -1,0 +1,13 @@
+<template name="commentsItem">
+  <div class="list-group-item">
+    <div class="post-content">
+      {{# with user }}
+        {{> usersItem }}
+      {{/ with }}
+      <span>{{ body }}</span>
+      <span class="text-muted pull-right">
+        {{ friendlyCreatedAt }}
+      </span>
+    </div>
+  </div>
+</template>

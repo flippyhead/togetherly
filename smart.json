@@ -1,0 +1,13 @@
+{
+  "packages": {
+    "bootstrap-3": {},
+    "accounts-ui-bootstrap-3": {},
+    "iron-router": {},
+    "observatory": {},
+    "router": {},
+    "spin": {},
+    "minimongoid": {},
+    "moment": {},
+    "gravatar": {}
+  }
+}
