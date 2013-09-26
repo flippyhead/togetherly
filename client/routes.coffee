@@ -27,8 +27,17 @@ Router.map ->
 
   @route 'postsShow',
     path: '/posts/:_id'
+    waitOn: ->
+      Meteor.subscribe 'posts', @params._id
     data: ->
       Post.find @params._id
+
+  @route 'postsLike',
+    path: '/posts/:_id/like'
+    controller: 'PostsController'
+    action: 'like'
+    data: ->
+      Post.first _id: @params._id
 
   @route 'usersShow',
     path: '/users/:_id'
@@ -40,3 +49,8 @@ Router.map ->
   @route 'postsIndex', path: '/posts'
 
   @route 'loading', path: '/loading'
+
+
+class @PostsController extends RouteController
+  like: ->
+    @router.go 'postsShow', @params

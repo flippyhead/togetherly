@@ -1,14 +1,23 @@
 <template name="postsShow">
-  <div>{{ url }}</div>
-  <div class="text-muted">
-    {{ title }}
+
+  <div class="row">
+    <h4 class="post--lead col-sm-11">
+      {{> postsPost}}
+    </h4>
+
+    <h3 class="col-sm-1">
+      <a href="{{pathFor 'postsLike'}}" class="pull-right glyphicon glyphicon-heart-empty"></a>
+    </h3>
   </div>
-  <form>
+
+  <form role="form">
     <div class="form-group">
       <input type="text" class="form-control" name="comment" placeholder="Write a comment..." autofocus></input>
     </div>
   </form>
+
   {{#each comments }}
     {{> commentsItem }}
   {{/each }}
+
 </template>

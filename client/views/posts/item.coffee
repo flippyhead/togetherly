@@ -1,6 +1,6 @@
 Template.postsItem.helpers
   title: ->
-    @title or @url
+    @title or @uri
 
   owner: ->
     Meteor.users.findOne @userId

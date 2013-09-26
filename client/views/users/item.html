@@ -1,9 +1,5 @@
 <template name="usersItem">
-  {{#if _id }}
   <a href="{{ pathFor 'usersShow' }}">
     <img class="img-rounded small" src="{{ gravatarImageUrl }}" title="{{ username }}"/>
   </a>
-  {{else }}
-    xxx
-  {{/if }}
 </template>
