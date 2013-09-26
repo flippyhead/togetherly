@@ -15,7 +15,8 @@ if Post.find().count() is 0
     password: 'password'
 
   p1 = Post.create
-    userId: u1._id
+    userId: u1
+    title: 'Introducing telescope'
     url: 'http://sachagreif.com/introducing-telescope/'
     commentsCount: 1
 
@@ -29,7 +30,8 @@ if Post.find().count() is 0
     postId: p1.id
 
   p2 = Post.create
-    userId: u1._id
+    title: 'Make apps faster: Meteor'
+    userId: u1
     url: 'http://meteor.com'
 
   Subscription.create
@@ -37,7 +39,8 @@ if Post.find().count() is 0
     userId: u2
 
   p3 = Post.create
-    userId: u1._id
+    title: 'Educate yourself!! This book will teach you how to make long sentences.'
+    userId: u2
     url: 'http://themeteorbook.com'
 
   Subscription.create

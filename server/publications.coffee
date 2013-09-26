@@ -1,20 +1,21 @@
 Meteor.publish 'posts', (limit) ->
 
-  publishUsers = (subscription) =>
-    Meteor.users.find({_id: subscription.userId}).observe
+  publishUser = (id) =>
+    Meteor.users.find({_id: id}).observe
       added: (user) =>
         @added 'users', user._id, user
 
   publishSubscriptions = (post) =>
     Subscription.find({postId: post._id}).observe
       added: (subscription) =>
-        publishUsers subscription
+        publishUser subscription.userId
         @added 'subscriptions', subscription._id, subscription
 
   Post.find({}, {limit}).observe
     added: (post) =>
       @added 'posts', post._id, post
       publishSubscriptions post
+      publishUser post.userId
     changed: (post) =>
       @changed 'posts', post._id, post
 

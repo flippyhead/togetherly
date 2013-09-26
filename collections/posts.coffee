@@ -18,6 +18,15 @@ class @Post extends Minimongoid
     attr.commentsCount = 0
     attr
 
+  @after_save: (post) ->
+    if Meteor.isServer
+      HTTP.get post.url, (error, result) ->
+        if error
+          console.log error
+        else
+          post.update
+            title: extractTitle(result.content)
+
   @error_message: ->
     msg = ''
     for i in @errors
@@ -68,3 +77,8 @@ validateURL = (url) ->
 
 cleanUrl = (url) ->
   if /^http/.test url then url else "http://#{url}"
+
+extractTitle = (html) ->
+  cheerio = Meteor.require('cheerio');
+  $ = cheerio.load(html)
+  $('head title').text()

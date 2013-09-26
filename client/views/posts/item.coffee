@@ -1,4 +1,9 @@
 Template.postsItem.helpers
+  title: ->
+    @title or @url
+
+  owner: ->
+    Meteor.users.findOne @userId
 
   users: ->
     subscriptions = Subscription.where(postId: @_id)
