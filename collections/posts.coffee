@@ -60,7 +60,7 @@ Meteor.methods
     throw new Meteor.Error 401, "You need to login to post new stories" if not user
 
     unless post = Post.first {url}
-      post = Post.create {url}
+      post = Post.create {url, userId}
 
     postId =  post.id
     if Subscription.count({userId, postId}) < 1
@@ -69,6 +69,18 @@ Meteor.methods
     throw new Meteor.Error 422, Post.error_message() unless post
 
     post
+
+  postsSubscribe: (postId) ->
+    user = Meteor.user()
+    authorize user
+    userId = user._id
+
+    unless subscription = Subscription.first {userId, postId}
+      Subscription.create {userId, postId}
+    else
+      subscription.destroy()
+
+    subscription
 
 
 validateURL = (url) ->
@@ -82,3 +94,6 @@ extractTitle = (html) ->
   cheerio = Meteor.require('cheerio');
   $ = cheerio.load(html)
   $('head title').text()
+
+authorize = (user) ->
+  throw new Meteor.Error 401, "You need to login to post new stories" if not user

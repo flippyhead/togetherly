@@ -10,6 +10,8 @@ Meteor.publish 'posts', (limit) ->
       added: (subscription) =>
         publishUser subscription.userId
         @added 'subscriptions', subscription._id, subscription
+      removed: (subscription) =>
+        @removed 'subscriptions', subscription._id
 
   Post.find({}, {limit}).observe
     added: (post) =>
@@ -33,6 +35,8 @@ Meteor.publish 'user', (id) ->
       added: (subscription) =>
         @added 'subscriptions', subscription._id, subscription
         publishPosts subscription
+      removed: (subscription) =>
+        @removed 'subscriptions', subscription._id
 
   Meteor.users.find(_id: id).observe
     added: (user) =>

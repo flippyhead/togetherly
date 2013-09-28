@@ -35,9 +35,7 @@ Router.map ->
   @route 'postsLike',
     path: '/posts/:_id/like'
     controller: 'PostsController'
-    action: 'like'
-    data: ->
-      Post.first _id: @params._id
+    action: 'subscribe'
 
   @route 'usersShow',
     path: '/users/:_id'
@@ -52,5 +50,7 @@ Router.map ->
 
 
 class @PostsController extends RouteController
-  like: ->
-    @router.go 'postsShow', @params
+  subscribe: ->
+    Router.go 'postsShow', @params
+    Meteor.call 'postsSubscribe', @params._id, (error, id) ->
+      return alert(error.reason) if error

@@ -1,5 +1,14 @@
 if Meteor.isServer
   Accounts.onCreateUser (options, user) ->
-    user.profile = options.profile if options.profile?
-    user.gravatarImageUrl = Gravatar.imageUrl options.email
+
+    if options.profile?
+      user.profile = options.profile
+
+    if facebook = user.services?.facebook
+      (user.emails ?= []).push {address: facebook.email, verified: yes}
+
+    if email = user.emails?[0]
+      email.verified = true
+      user.gravatarImageUrl = Gravatar.imageUrl email.address
+
     user
