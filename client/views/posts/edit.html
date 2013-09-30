@@ -1,9 +1,19 @@
 <template name="postsEdit">
   <form role="form">
+
     <div class="form-group">
-      <label for="url">URL</label>
       <input name="url" type="text" value="{{url}}" class="form-control" placeholder="example.com" autofocus>
     </div>
+
+    <div class="form-group">
+      <input type="text" class="form-control" name="emails" placeholder="Enter one or more email addresses"></input>
+    </div>
+
+    <div class="form-group">
+      <input type="text" class="form-control" name="comment" placeholder="Enter an optional comment"></input>
+    </div>
+
     <button type="submit" class="btn btn-default">Submit</button>
+
   </form>
 </template>

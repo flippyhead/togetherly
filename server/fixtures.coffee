@@ -25,7 +25,7 @@ if Post.find().count() is 0
     userId: u1
 
   Comment.create
-    body: "I love this site."
+    comment: "I love this site."
     userId: u1
     postId: p1.id
 

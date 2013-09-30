@@ -9,6 +9,7 @@
     "minimongoid": {},
     "moment": {},
     "gravatar": {},
-    "npm": {}
+    "npm": {},
+    "handlebars-server": {}
   }
 }

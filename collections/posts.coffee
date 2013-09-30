@@ -19,6 +19,8 @@ class @Post extends Minimongoid
     attr
 
   @after_save: (post) ->
+    post.createSubscription()
+
     if Meteor.isServer
       HTTP.get post.url, (error, result) ->
         if error
@@ -27,17 +29,26 @@ class @Post extends Minimongoid
           post.update
             title: extractTitle(result.content)
 
-  @error_message: ->
+  @findByUserId: (id) ->
+    subscriptions = Subscription.where userId: id
+    ids = _.pluck subscriptions, 'postId'
+    Post.find _id: {$in: ids}
+
+  @findOrCreateByUrl: (url, userId) ->
+    return post if post = Post.first {url}
+    return post if post = Post.create {url, userId} and post.isValid()
+    throw new Meteor.Error 422, post.error_message()
+
+  createSubscription: ->
+    attrs = {@userId, postId: @id}
+    Subscription.first(attrs) or Subscription.create(attrs)
+
+  error_message: ->
     msg = ''
     for i in @errors
       for key, value of i
         msg += "#{value}"
     msg
-
-  @findByUserId: (id) ->
-    subscriptions = Subscription.where userId: id
-    ids = _.pluck subscriptions, 'postId'
-    Post.find _id: {$in: ids}
 
   validate: ->
     @error 'url', 'URL is required.' if _.isEmpty @url
@@ -52,21 +63,24 @@ class @Post extends Minimongoid
 
 
 Meteor.methods
-  postsCreate: (postAttributes) ->
-    user = Meteor.user()
-    userId = user._id
-    url = cleanUrl postAttributes.url
+  postsCreate: (attrs) ->
+    authorize user = Meteor.user()
+    userIds = [userId = user._id]
+    url = cleanUrl attrs.url
+    {comment} = attrs
 
-    throw new Meteor.Error 401, "You need to login to post new stories" if not user
+    post = Post.findOrCreateByUrl url, userId
+    comment = Comment.create {userId, comment, postId: post.id}
 
-    unless post = Post.first {url}
-      post = Post.create {url, userId}
+    _.each extractEmails(attrs.emails), (email) ->
+      friend = createUserByEmail email
+      subscribe {userId: friend._id, postId: post._id}
 
-    postId =  post.id
-    if Subscription.count({userId, postId}) < 1
-      Subscription.create {userId, postId}
-
-    throw new Meteor.Error 422, Post.error_message() unless post
+      if Meteor.isServer
+        Email.send
+          to: email
+          subject: "#{nameOrEmail(user)} has shared something with you."
+          text: Handlebars.templates['share-notification']({comment, post})
 
     post
 
@@ -75,13 +89,22 @@ Meteor.methods
     authorize user
     userId = user._id
 
-    unless subscription = Subscription.first {userId, postId}
-      Subscription.create {userId, postId}
-    else
-      subscription.destroy()
+    subscribe {userId, postId}, yes
 
+
+createUserByEmail = (email) ->
+  return user if user = Meteor.users.findOne {'emails.address': email}
+  Meteor.users.find Accounts.createUser({email, password: 'eventually-randomly-generated'})
+
+subscribe = (attrs, destroy = no) ->
+  unless subscription = Subscription.first attrs
+    Subscription.create attrs
+  else
+    subscription.destroy() if destroy
     subscription
 
+nameOrEmail = (user) ->
+  user.profile?.name or user.emails[0]?.address or 'a friend'
 
 validateURL = (url) ->
   re = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi
@@ -95,5 +118,6 @@ extractTitle = (html) ->
   $ = cheerio.load(html)
   $('head title').text()
 
-authorize = (user) ->
-  throw new Meteor.Error 401, "You need to login to post new stories" if not user
+extractEmails = (emails) ->
+  return emails if emails instanceof Array
+  _.compact emails?.split /[\s+,\,+]/

@@ -21,3 +21,5 @@ http
 npm
 less
 accounts-facebook
+email
+handlebars-server

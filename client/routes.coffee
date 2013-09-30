@@ -37,6 +37,21 @@ Router.map ->
     controller: 'PostsController'
     action: 'subscribe'
 
+
+  # @route 'postsShare',
+  #   path: '/posts/:_id/share'
+  #   controller: 'PostsController'
+  #   action: 'share'
+  #   data: ->
+  #     Post.find @params._id
+
+  @route 'subscriptionsNew',
+    path: '/subscriptions/new'
+    controller: 'SubscriptionsController'
+    action: 'new'
+    # data: ->
+    #   Post.find @params._id
+
   @route 'usersShow',
     path: '/users/:_id'
     waitOn: ->
@@ -54,3 +69,7 @@ class @PostsController extends RouteController
     Router.go 'postsShow', @params
     Meteor.call 'postsSubscribe', @params._id, (error, id) ->
       return alert(error.reason) if error
+
+class @SubscriptionsController extends RouteController
+  new: ->
+    @render()
