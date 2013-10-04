@@ -4,7 +4,7 @@ Router.configure
   loadingTemplate: 'loading'
   before: ->
     return if Meteor.user() or
-      _.include(['home', 'postsNew'], @context.route.name)
+      _.include(['home', 'postsShowWithAuth'], @context.route.name)
     if Meteor.loggingIn()
       @render 'loading'
     else
@@ -32,25 +32,22 @@ Router.map ->
     data: ->
       Post.find @params._id
 
+  @route 'postsShare',
+    path: '/posts/:_id/share'
+    waitOn: ->
+      Meteor.subscribe 'posts', @params._id
+    data: ->
+      Post.find @params._id
+
   @route 'postsLike',
     path: '/posts/:_id/like'
     controller: 'PostsController'
     action: 'subscribe'
 
-
-  # @route 'postsShare',
-  #   path: '/posts/:_id/share'
-  #   controller: 'PostsController'
-  #   action: 'share'
-  #   data: ->
-  #     Post.find @params._id
-
-  @route 'subscriptionsNew',
-    path: '/subscriptions/new'
-    controller: 'SubscriptionsController'
-    action: 'new'
-    # data: ->
-    #   Post.find @params._id
+  @route 'postsShowWithAuth',
+    path: '/p/:_id/:resumeToken'
+    controller: 'PostsController'
+    action: 'authThenShow'
 
   @route 'usersShow',
     path: '/users/:_id'
@@ -70,6 +67,6 @@ class @PostsController extends RouteController
     Meteor.call 'postsSubscribe', @params._id, (error, id) ->
       return alert(error.reason) if error
 
-class @SubscriptionsController extends RouteController
-  new: ->
-    @render()
+  authThenShow: ->
+    Meteor.login @params.resumeToken, =>
+      Router.go 'postsShow', @params

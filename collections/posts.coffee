@@ -2,12 +2,6 @@ class @Post extends Minimongoid
 
   @_collection: new Meteor.Collection 'posts'
 
-  @extract: (text, user) ->
-    _.each Addressable.extract(text), (link) ->
-      url = link.href
-      unless @find {url}
-        Posts.insert {url, user_id: user._id}
-
   @before_save: (attr) ->
     attr.url = cleanUrl attr.url
     attr
@@ -19,7 +13,7 @@ class @Post extends Minimongoid
     attr
 
   @after_save: (post) ->
-    post.createSubscription()
+    post.subscribe User.find(@userId)
 
     if Meteor.isServer
       HTTP.get post.url, (error, result) ->
@@ -29,18 +23,27 @@ class @Post extends Minimongoid
           post.update
             title: extractTitle(result.content)
 
+  @extract: (text, user) ->
+    _.each Addressable.extract(text), (link) ->
+      url = link.href
+      unless @find {url}
+        Posts.insert {url, user_id: user._id}
+
   @findByUserId: (id) ->
     subscriptions = Subscription.where userId: id
     ids = _.pluck subscriptions, 'postId'
     Post.find _id: {$in: ids}
 
   @findOrCreateByUrl: (url, userId) ->
+    url = cleanUrl url
     return post if post = Post.first {url}
-    return post if post = Post.create {url, userId} and post.isValid()
-    throw new Meteor.Error 422, post.error_message()
 
-  createSubscription: ->
-    attrs = {@userId, postId: @id}
+    post = Post.create {url, userId}
+    throw new Meteor.Error 422, post.error_message() unless post.isValid()
+    post
+
+  subscribe: (user) ->
+    attrs = {userId: user.id, postId: @id}
     Subscription.first(attrs) or Subscription.create(attrs)
 
   error_message: ->
@@ -64,47 +67,31 @@ class @Post extends Minimongoid
 
 Meteor.methods
   postsCreate: (attrs) ->
-    authorize user = Meteor.user()
-    userIds = [userId = user._id]
-    url = cleanUrl attrs.url
-    {comment} = attrs
+    authorize user = User.current()
+    {comment, emails, url, postId} = attrs
 
-    post = Post.findOrCreateByUrl url, userId
-    comment = Comment.create {userId, comment, postId: post.id}
+    post = if postId
+      Post.find postId
+    else
+      Post.findOrCreateByUrl url, user.id
 
-    _.each extractEmails(attrs.emails), (email) ->
-      friend = createUserByEmail email
-      subscribe {userId: friend._id, postId: post._id}
-
-      if Meteor.isServer
-        Email.send
-          to: email
-          subject: "#{nameOrEmail(user)} has shared something with you."
-          text: Handlebars.templates['share-notification']({comment, post})
+    user.subscribe post
+    user.sharePost emails, post, comment
 
     post
 
   postsSubscribe: (postId) ->
-    user = Meteor.user()
-    authorize user
-    userId = user._id
+    authorize user = User.current()
+    attrs = userId: user.id, postId: postId
 
-    subscribe {userId, postId}, yes
+    if subscription = Subscription.first attrs
+      subscription.destroy()
+    else
+      user.subscribe Post.find(postId)
 
-
-createUserByEmail = (email) ->
-  return user if user = Meteor.users.findOne {'emails.address': email}
-  Meteor.users.find Accounts.createUser({email, password: 'eventually-randomly-generated'})
-
-subscribe = (attrs, destroy = no) ->
-  unless subscription = Subscription.first attrs
-    Subscription.create attrs
-  else
-    subscription.destroy() if destroy
     subscription
 
-nameOrEmail = (user) ->
-  user.profile?.name or user.emails[0]?.address or 'a friend'
+
 
 validateURL = (url) ->
   re = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi
@@ -118,6 +105,3 @@ extractTitle = (html) ->
   $ = cheerio.load(html)
   $('head title').text()
 
-extractEmails = (emails) ->
-  return emails if emails instanceof Array
-  _.compact emails?.split /[\s+,\,+]/
