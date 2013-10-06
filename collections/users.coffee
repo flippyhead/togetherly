@@ -9,10 +9,11 @@ class @User extends Minimongoid
     return user if user = @first 'emails.address': email
     @first Accounts.createUser({email, password: 'eventually-randomly-generated'})
 
-  sharePost: (emails, post, comment = '') ->
+  sharePost: (emails, post, comment) ->
     _.each extractEmails(emails), (email) =>
       friend = User.createByEmail email
       friend.subscribe post
+      @follow friend
 
       comment = Comment.create {userId: @id, postId: post.id, comment}
 
@@ -34,15 +35,19 @@ class @User extends Minimongoid
   nameOrEmail: ->
     @profile?.name or @email() or 'friend'
 
-  subscribe: (post) ->
-    attrs = {userId: @id, postId: post.id}
-    Subscription.first(attrs) or Subscription.create(attrs)
-
   loginToken: ->
     @services.resume?.loginTokens?[0]?.token
 
   authorizedPostUrl: (post) ->
     Meteor.absoluteUrl "p/#{post.id}/#{@loginToken()}"
+
+  subscribe: (post) ->
+    attrs = {userId: @id, postId: post.id}
+    Subscription.first(attrs) or Subscription.create(attrs)
+
+  follow: (friend) ->
+    attrs = {userId: @id, friendId: friend.id}
+    Dyad.first(attrs) or Dyad.create(attrs)
 
 
 if Meteor.isServer
@@ -62,6 +67,19 @@ if Meteor.isServer
     ((user.services.resume = {}).loginTokens = []).push stampedToken
 
     user
+
+
+Meteor.methods
+  usersFollow: (userId) ->
+    authorize user = User.current()
+    attrs = userId: user._id, friendId: userId
+
+    if dyad = Dyad.first attrs
+      dyad.destroy()
+    else
+      user.follow User.find(userId)
+
+    dyad
 
 
 extractEmails = (emails) ->

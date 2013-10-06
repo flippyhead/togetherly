@@ -1,6 +1,17 @@
 <template name="usersShow">
-  <h1>{{ username }}</h1>
+
+  <div class="row">
+    <h3 class="col-sm-9">
+      {{ username }}
+    </h3>
+
+    <h3 class="col-sm-3 post--controls">
+      <a href="{{pathFor 'usersFollow'}}" class="post--controls--control pull-right glyphicon glyphicon-asterisk {{followControlState}}"></a>
+    </h3>
+  </div>
+
   {{#with posts }}
     {{> postsList }}
   {{/with}}
+
 </template>

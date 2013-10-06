@@ -1,0 +1,2 @@
+class @PublicationRelation
+  constructor: (@sub) ->

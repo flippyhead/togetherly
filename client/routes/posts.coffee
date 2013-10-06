@@ -1,20 +1,4 @@
-Router.configure
-  layout: 'layout'
-  notFoundTemplate: 'errors404'
-  loadingTemplate: 'loading'
-  before: ->
-    return if Meteor.user() or
-      _.include(['home', 'postsShowWithAuth'], @context.route.name)
-    if Meteor.loggingIn()
-      @render 'loading'
-    else
-      @render 'accessDenied'
-      @stop()
-
-
 Router.map ->
-
-  @route 'home', path: '/'
 
   @route 'postsNew',
     template: 'postsEdit'
@@ -28,7 +12,7 @@ Router.map ->
   @route 'postsShow',
     path: '/posts/:_id'
     waitOn: ->
-      Meteor.subscribe 'posts', @params._id
+      Meteor.subscribe 'post', @params._id
     data: ->
       Post.find @params._id
 
@@ -49,17 +33,9 @@ Router.map ->
     controller: 'PostsController'
     action: 'authThenShow'
 
-  @route 'usersShow',
-    path: '/users/:_id'
-    waitOn: ->
-      Meteor.subscribe 'user', @params._id
-    data: ->
-      Meteor.users.findOne @params._id
-
   @route 'postsIndex', path: '/posts'
 
   @route 'loading', path: '/loading'
-
 
 class @PostsController extends RouteController
   subscribe: ->

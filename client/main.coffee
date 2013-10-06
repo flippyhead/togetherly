@@ -1,6 +1,7 @@
-Meteor.subscribe 'posts', 100
+Meteor.subscribe 'postsAll', 100
 Meteor.subscribe 'comments'
-Meteor.subscribe 'subscriptio2ns'
+Meteor.subscribe 'subscriptions'
+Meteor.subscribe 'dyads'
 
 Meteor.login = (resumeToken, callback) ->
   Accounts.callLoginMethod

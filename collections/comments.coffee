@@ -2,6 +2,16 @@ class @Comment extends Minimongoid
 
   @_collection: new Meteor.Collection 'comments'
 
+  validate: ->
+    @error 'comment', 'comment is required.' if _.isEmpty @comment
+
+  error_message: ->
+    msg = ''
+    for i in @errors
+      for key, value of i
+        msg += "#{value}"
+    msg
+
 Meteor.methods
   commentsCreate: (attrs) ->
     user = Meteor.user()
