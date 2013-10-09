@@ -1,7 +1,5 @@
 Template.home.helpers
   posts: ->
-    posts = []
-    Dyad.find({userId: User.current().id}).forEach (dyad)->
-      Subscription.find({userId: dyad.friendId}).forEach (subscription) ->
-        posts.push Post.find subscription.postId
-    posts
+    fids = _.pluck Dyad.where(userId: User.current().id), 'friendId'
+    pids = _.pluck Subscription.where(userId: {$in: fids}), 'postId'
+    Post.find {_id: {$in: pids}}, sort: {createdAt: -1}

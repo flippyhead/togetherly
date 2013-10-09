@@ -1,8 +1,16 @@
 Router.map ->
 
+  @route 'postsSubmit',
+    template: 'postsEdit'
+    path: '/posts/new/:url'
+    data: ->
+      new Post(url: @params.url, source: 'b')
+
   @route 'postsNew',
     template: 'postsEdit'
     path: '/posts/new'
+    data: ->
+      new Post(source: 'w')
 
   @route 'postsEdit',
     path: '/posts/:_id/edit'

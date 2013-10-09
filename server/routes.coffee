@@ -1,5 +1,13 @@
 tb = Observatory.getToolbox()
 
+# fs = Npm.require 'fs'
+# Meteor.Router.add '/p.js', 'GET', ->
+#   headers = 'Content-type': 'text/javascript'
+#   path = "#{Meteor.settings.root_path}/public/bookmarklet.js"
+#   Meteor.call 'postsCreate', @request.query
+
+#   return [200, headers, fs.readFileSync(path)]
+
 Meteor.Router.add '/posts', 'POST', ->
 
   senderEmail = @request.body['sender']

@@ -1,4 +1,3 @@
 Template.postsIndex.helpers
   posts: ->
-    Post.find {},
-      sort: {createdAt: -1}
+    Post.find {}, sort: {createdAt: -1}

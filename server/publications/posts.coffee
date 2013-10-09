@@ -43,15 +43,15 @@ class PostsRelation extends PublicationRelation
     Post.find(_id: subscription.postId).observe
       added: (post) =>
         @sub.added 'posts', post._id, post
+      removed: (post) =>
+        @sub.removed 'posts', post._id
 
   friendsPosts: ->
     Dyad.find({userId: @sub.userId}).observe
       added: (dyad) =>
         @sub.added 'dyads', dyad._id, dyad
-        # friend = User.find dyad.friendId
         friend = @user dyad.friendId
         @subscriptionsByUser friend
-
       removed: (dyad) =>
         @sub.removed 'dyads', dyad._id
 
