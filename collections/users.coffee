@@ -20,20 +20,33 @@ class @User extends Minimongoid
       if Meteor.isServer
         textAttributes = {
           comment: comment.comment
-          salutation: friend.nameOrEmail()
+          salutation: friend.name()
           authorizedPostUrl: friend.authorizedPostUrl(post)
         }
 
         Email.send
           to: email
-          subject: "#{@nameOrEmail()} has shared something with you."
+          subject: "#{@name()} has shared something with you."
           html: Handlebars.templates['share-notification'](textAttributes)
+
+  createFriends: (emails, callback) ->
+    _.each extractEmails(emails), (email) =>
+      friend = User.createByEmail email
+      @follow friend
+      callback friend
+
+  inviteFriends: (emails, note) ->
+    @createFriends emails, (user) ->
+      console.log user
 
   email: ->
     if (@emails and @emails.length) then @emails[0].address else ''
 
-  nameOrEmail: ->
-    @profile?.name or @email() or 'friend'
+  name: ->
+    if @profile.firstName then @fullName() else extractLocalPart(@email()) or 'friend'
+
+  fullName: ->
+    "#{@profile.firstName} #{@profile.lastName}"
 
   loginToken: ->
     @services.resume?.loginTokens?[0]?.token
@@ -53,15 +66,16 @@ class @User extends Minimongoid
 if Meteor.isServer
   Accounts.onCreateUser (options, user) ->
 
-    if options.profile?
-      user.profile = options.profile
+    user.profile = options.profile or {}
 
     if facebook = user.services?.facebook
       (user.emails ?= []).push {address: facebook.email, verified: yes}
+      user.profile.firstName = facebook.first_name
+      user.profile.lastName = facebook.first_name
 
     if email = user.emails?[0]
       email.verified = true
-      user.gravatarImageUrl = Gravatar.imageUrl email.address
+      user.profile.gravatarImageUrl = Gravatar.imageUrl email.address
 
     stampedToken = Accounts._generateStampedLoginToken()
     ((user.services.resume = {}).loginTokens = []).push stampedToken
@@ -81,6 +95,13 @@ Meteor.methods
 
     dyad
 
+  usersInvite: (emails, note) ->
+    authorize user = User.current()
+    user.inviteFriends emails, note
+
+extractLocalPart = (email) ->
+  matches = email.match(/^(.+)@(.+)\.(\w+)$/i)
+  matches[1] if matches.length is 4
 
 extractEmails = (emails) ->
   return emails if emails instanceof Array

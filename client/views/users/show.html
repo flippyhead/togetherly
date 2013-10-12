@@ -1,13 +1,16 @@
 <template name="usersShow">
 
-  <div class="row">
-    <h3 class="col-sm-9">
-      {{ username }}
-    </h3>
+  <h4 class="text-center">
+    <img class="img-rounded" src="{{ profile.gravatarImageUrl }}" title="{{ username }}"/>
+    <div class="caption">
+      {{name}}
+    </div>
+  </h4>
 
-    <h3 class="col-sm-3 post--controls">
-      <a href="{{pathFor 'usersFollow'}}" class="post--controls--control pull-right glyphicon glyphicon-asterisk {{followControlState}}"></a>
-    </h3>
+  <div class="text-center post--controls--control ">
+    <a href="{{pathFor 'usersFollow'}}" class="{{followControlState}}">
+      <span class="glyphicon glyphicon-asterisk"></span> {{followControlMessage}}
+    </a>
   </div>
 
   {{#with posts }}

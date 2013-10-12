@@ -1,0 +1,12 @@
+<template name="usersFriend">
+
+  <div class="col-sm-2 col-md-2 text-center">
+    <a class="thumbnail" href="{{ pathFor 'usersShow' }}">
+      <img class="img-rounded" src="{{ profile.gravatarImageUrl }}" title="{{ username }}"/>
+      <div class="caption">
+        {{name}}
+      </div>
+    </a>
+  </div>
+
+</template>

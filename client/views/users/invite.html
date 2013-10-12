@@ -1,0 +1,23 @@
+<template name="usersInvite">
+
+  <form role="form">
+
+    <div class="form-group">
+      <input type="text" class="form-control" name="emails" placeholder="Enter one or more email addresses"></input>
+    </div>
+
+    <div class="form-group">
+      <input type="text" class="form-control" name="note" placeholder="Enter an optional note"></input>
+    </div>
+
+    <button type="submit" class="btn btn-default">Invite</button>
+
+  </form>
+
+
+  <h5>Existing Friends:</h5>
+  {{#each users}}
+    {{> usersFriend}}
+  {{/each}}
+
+</template>

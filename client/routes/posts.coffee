@@ -1,5 +1,15 @@
 Router.map ->
 
+  @route 'postsIndex', path: '/posts'
+
+  @route 'postsFriends',
+    path: '/posts/friends'
+    data: ->
+      return {} unless userId = User.current()?.id
+      fids = _.pluck Dyad.where({userId}), 'friendId'
+      pids = _.pluck Subscription.where(userId: {$in: fids}), 'postId'
+      Post.find {_id: {$in: pids}}, sort: {createdAt: -1}
+
   @route 'postsSubmit',
     template: 'postsEdit'
     path: '/posts/new/:url'
@@ -41,9 +51,8 @@ Router.map ->
     controller: 'PostsController'
     action: 'authThenShow'
 
-  @route 'postsIndex', path: '/posts'
-
   @route 'loading', path: '/loading'
+
 
 class @PostsController extends RouteController
   subscribe: ->

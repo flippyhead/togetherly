@@ -5,6 +5,14 @@ class PostsRelation extends PublicationRelation
       added: (user) =>
         @sub.added 'users', user._id, user
 
+  commentsByPost: (post) ->
+    Comment.find({postId: post._id}).observe
+      added: (comment) =>
+        @user comment.userId
+        @sub.added 'comments', comment._id, comment
+      removed: (comment) =>
+        @sub.removed 'comments', comment._id
+
   subscriptionsByPost: (post) ->
     Subscription.find({postId: post._id}).observe
       added: (subscription) =>
@@ -28,6 +36,7 @@ class PostsRelation extends PublicationRelation
         @sub.added 'posts', post._id, post
         @user post.userId
         @subscriptionsByPost post
+        @commentsByPost post
       changed: (post) =>
         @sub.changed 'posts', post._id, post
 

@@ -1,5 +1,9 @@
 Router.map ->
 
+  @route 'usersInvite',
+    template: 'usersInvite'
+    path: '/users/invite'
+
   @route 'usersShow',
     path: '/users/:_id'
     waitOn: ->
@@ -15,6 +19,7 @@ Router.map ->
   @route 'loading', path: '/loading'
 
 class @UsersController extends RouteController
+
   follow: ->
     Router.go 'usersShow', @params
     Meteor.call 'usersFollow', @params._id, (error, id) ->

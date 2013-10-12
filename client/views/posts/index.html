@@ -1,5 +1,11 @@
 <template name="postsIndex">
-{{#with posts }}
-  {{> postsList }}
-{{/with}}
+
+  <h4 class="text-center">
+    Recent posts
+  </h4>
+
+  {{#with posts }}
+    {{> postsList }}
+  {{/with}}
+
 </template>
