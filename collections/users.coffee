@@ -71,7 +71,7 @@ if Meteor.isServer
     if facebook = user.services?.facebook
       (user.emails ?= []).push {address: facebook.email, verified: yes}
       user.profile.firstName = facebook.first_name
-      user.profile.lastName = facebook.first_name
+      user.profile.lastName = facebook.last_name
 
     if email = user.emails?[0]
       email.verified = true

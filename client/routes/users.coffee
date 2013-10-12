@@ -2,7 +2,18 @@ Router.map ->
 
   @route 'usersInvite',
     template: 'usersInvite'
-    path: '/users/invite'
+    path: '/user/invite'
+
+  @route 'usersWelcome',
+    path: '/user/welcome'
+
+  @route 'usersFriends',
+    path: '/user/friends'
+    waitOn: ->
+      Meteor.subscribe 'user', User.current().id
+    data: ->
+      fids = _.pluck Dyad.where(userId: User.current().id), 'friendId'
+      User.find _id: {$in: fids}
 
   @route 'usersShow',
     path: '/users/:_id'

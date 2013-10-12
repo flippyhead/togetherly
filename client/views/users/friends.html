@@ -1,0 +1,11 @@
+<template name="usersFriends">
+
+  <h4 class="text-center">
+    You've got {{count}} friends. <a href="{{pathFor 'usersInvite'}}">Invite more</a>!
+  </h4>
+
+  {{#each this}}
+    {{> usersUser}}
+  {{/each}}
+
+</template>
