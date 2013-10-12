@@ -6,6 +6,8 @@ Router.map ->
 
   @route 'usersWelcome',
     path: '/user/welcome'
+    data: ->
+      User.current()
 
   @route 'usersFriends',
     path: '/user/friends'

@@ -1,10 +1,18 @@
 <template name="usersWelcome">
-  <h1>Welcome {{fullName}}!</h1>
 
-  Togetherly works best when used with people you know. To get started:
+  <h2 class="text-center">
+    There's a first time for everything, {{profile.firstName}}
+  </h2>
 
-  <h3>
-    <a class="btn btn-success" href="{{pathFor 'usersInvite'}}">invite friends</a>
-  </h3>
+  <p class="lead">
+    To get started, install the bookmarklet to make sharing a snap.
+    Togetherly is better when you do it with friends, so invite a few.
+    They'll see what you share and you can see what they share -- all in real time.
+  </p>
+
+  <h1 class="text-center">
+    <a class="btn btn-success" href="{{pathFor 'usersInvite'}}">Invite Friends</a>
+    <a class="btn btn-info" href="{{pathFor 'infoBookmarklet'}}">Add the Bookmarlet</a>
+  </h1>
 
 </template>
