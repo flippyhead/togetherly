@@ -37,7 +37,17 @@ class @User extends Minimongoid
 
   inviteFriends: (emails, note) ->
     @createFriends emails, (user) ->
-      console.log user
+      if Meteor.isServer
+        textAttributes = {
+          note
+          salutation: user.name()
+          authorizedPostUrl: friend.authorizedPostUrl(post)
+        }
+
+        Email.send
+          to: email
+          subject: "#{@name()} has shared something with you."
+          html: Handlebars.templates['share-notification'](textAttributes)
 
   email: ->
     if (@emails and @emails.length) then @emails[0].address else ''
@@ -53,6 +63,9 @@ class @User extends Minimongoid
 
   authorizedPostUrl: (post) ->
     Meteor.absoluteUrl "p/#{post.id}/#{@loginToken()}"
+
+  authorizedUrl: ->
+    Meteor.absoluteUrl "u/#{@loginToken()}"
 
   subscribe: (post) ->
     attrs = {userId: @id, postId: post.id}

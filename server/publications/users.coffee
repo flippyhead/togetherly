@@ -6,7 +6,7 @@ class UsersRelation extends PublicationRelation
         @sub.added 'subscriptions', subscription._id, subscription
         @postsBySubscription subscription
       removed: (subscription) =>
-        @removed 'subscriptions', subscription._id
+        @sub.removed 'subscriptions', subscription._id
 
   postsBySubscription: (subscription) ->
     Post.find(_id: subscription.postId).observe

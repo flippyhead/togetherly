@@ -37,7 +37,7 @@ Router.map ->
   @route 'postsShare',
     path: '/posts/:_id/share'
     waitOn: ->
-      Meteor.subscribe 'posts', @params._id
+      Meteor.subscribe 'post', @params._id
     data: ->
       Post.find @params._id
 

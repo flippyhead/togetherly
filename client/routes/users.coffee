@@ -1,7 +1,6 @@
 Router.map ->
 
   @route 'usersInvite',
-    template: 'usersInvite'
     path: '/user/invite'
 
   @route 'usersWelcome',
@@ -17,6 +16,9 @@ Router.map ->
       fids = _.pluck Dyad.where(userId: User.current().id), 'friendId'
       User.find _id: {$in: fids}
 
+  @route 'usersNew',
+    path: '/users/new'
+
   @route 'usersShow',
     path: '/users/:_id'
     waitOn: ->
@@ -29,9 +31,17 @@ Router.map ->
     controller: 'UsersController'
     action: 'follow'
 
-  @route 'loading', path: '/loading'
+  @route 'usersAuth',
+    path: '/i/:resumeToken'
+    controller: 'UsersController'
+    action: 'auth'
+
 
 class @UsersController extends RouteController
+
+  auth: ->
+    Meteor.login @params.resumeToken, =>
+      Router.go 'postsShow', @params
 
   follow: ->
     Router.go 'usersShow', @params

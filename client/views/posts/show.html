@@ -17,14 +17,16 @@
     {{> postsPost}}
   </h4>
 
+  <div class="post--comment-container">
+    {{#each comments }}
+      {{> commentsItem }}
+    {{/each }}
+  </div>
+
   <form role="form">
     <div class="form-group">
       <input type="text" class="form-control" name="comment" placeholder="Write a comment..." autofocus></input>
     </div>
   </form>
-
-  {{#each comments }}
-    {{> commentsItem }}
-  {{/each }}
 
 </template>
