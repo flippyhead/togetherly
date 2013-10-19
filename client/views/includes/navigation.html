@@ -11,18 +11,12 @@
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-          <a href="{{pathFor 'postsIndex'}}">
+          <a href="{{pathFor 'postsFriends'}}">
             <span class="glyphicon glyphicon-home"></span>
           </a>
         </li>
 
         {{#if currentUser}}
-          <li>
-            <a href="{{pathFor 'postsFriends'}}">
-              <span class="glyphicon glyphicon-user"></span>
-            </a>
-          </li>
-
           <li>
             <a href="{{pathFor 'postsNew'}}">
               <span class="glyphicon glyphicon-plus"></span>

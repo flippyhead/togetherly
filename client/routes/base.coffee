@@ -17,6 +17,3 @@ Router.configure
 Router.map ->
 
   @route 'loading', path: '/loading'
-
-  @route 'home',
-    path: '/'

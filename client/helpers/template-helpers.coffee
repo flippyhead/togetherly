@@ -4,3 +4,8 @@ Handlebars.registerHelper 'friendlyCreatedAt', ->
 
 Handlebars.registerHelper 'uri', (url) ->
   url.replace /https?:\/\//, ''
+
+Handlebars.registerHelper 'uriHost', (url) ->
+  a = document.createElement('a')
+  a.href = url
+  a.hostname

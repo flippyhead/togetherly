@@ -20,7 +20,8 @@ class @User extends Minimongoid
       if Meteor.isServer
         textAttributes = {
           comment: comment.comment
-          salutation: friend.name()
+          toName: friend.name()
+          fromName: @name()
           authorizedPostUrl: friend.authorizedPostUrl(post)
         }
 
@@ -41,7 +42,7 @@ class @User extends Minimongoid
         textAttributes = {
           note
           salutation: user.name()
-          authorizedPostUrl: friend.authorizedPostUrl(post)
+          authorizedPostUrl: user.authorizedPostUrl(post)
         }
 
         Email.send
@@ -114,7 +115,7 @@ Meteor.methods
 
 extractLocalPart = (email) ->
   matches = email.match(/^(.+)@(.+)\.(\w+)$/i)
-  matches[1] if matches.length is 4
+  matches[1] if matches?.length is 4
 
 extractEmails = (emails) ->
   return emails if emails instanceof Array

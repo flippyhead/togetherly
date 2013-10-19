@@ -1,7 +1,8 @@
 <template name="usersFriends">
 
   <h4 class="text-center friends--title">
-    You've got {{count}} friends. <a href="{{pathFor 'usersInvite'}}">Invite more</a>!
+    You've got {{count}} friends.
+    <a href="{{pathFor 'usersInvite'}}" class="clickable-link">Invite more</a>
   </h4>
 
   {{#each this}}

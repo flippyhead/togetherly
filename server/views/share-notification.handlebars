@@ -1,9 +1,15 @@
 <p>
-  Hello {{salutation}}
+  {{toName}}, {{fromName}} has something to share!
 </p
 
+{{#if comment.comment}}
+  <p>
+    {{comment.comment}}
+  </p>
+{{/if}}
+
 <p>
-  {{comment.comment}}
+  View more and reply here:
 </p>
 
 <p>

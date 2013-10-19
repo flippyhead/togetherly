@@ -2,6 +2,14 @@ img.small {
   width: 25px;
 }
 
+img.medium {
+  width: 35px;
+}
+
+.container {
+  max-width: 700px;
+}
+
 .block {
   display: block !important;
 }
@@ -25,6 +33,29 @@ img.small {
 
 .fluid {
   width: 100%;
+}
+
+a.clickable-link {
+  color: #428bca;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: #2a6496;
+    text-decoration: underline;
+  }
+}
+
+
+a {
+  color: #333333;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: #333333;
+    text-decoration: none;
+  }
 }
 
 .logged-out--container {
@@ -53,7 +84,14 @@ img.small {
 }
 
 .post--controls--control {
-  padding-bottom: 10px;
+  margin-top: 5px;
+  margin-right: 5px;
+  color: #616161 !important;
+
+  &:hover,
+  &:focus {
+    color: #ABABAB !important;
+  }
 }
 
 .post--controls--dropdown {

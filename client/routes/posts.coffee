@@ -3,7 +3,7 @@ Router.map ->
   @route 'postsIndex', path: '/posts'
 
   @route 'postsFriends',
-    path: '/posts/friends'
+    path: '/'
     data: ->
       return {} unless userId = User.current()?.id
       fids = _.pluck Dyad.where({userId}), 'friendId'

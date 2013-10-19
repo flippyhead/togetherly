@@ -12,16 +12,17 @@ class @Post extends Minimongoid
     attr.commentsCount = 0
     attr
 
-  @after_save: (post) ->
-    post.subscribe User.find(@userId)
-
+  @after_create: (post) ->
     if Meteor.isServer
-      HTTP.get post.url, (error, result) ->
+      HTTP.get post.url, (error, result) =>
         if error
           console.log error
         else
-          post.update
-            title: extractTitle(result.content)
+          post.update extractMetaData(result.content)
+    post
+
+  @after_save: (post) ->
+    post.subscribe User.find(@userId)
 
   @extract: (text, user) ->
     _.each Addressable.extract(text), (link) ->
@@ -100,8 +101,9 @@ validateURL = (url) ->
 cleanUrl = (url) ->
   if /^http/.test url then url else "http://#{url}"
 
-extractTitle = (html) ->
+extractMetaData = (html) ->
   cheerio = Meteor.require('cheerio');
   $ = cheerio.load(html)
-  $('head title').text()
-
+  title = $('head title').text()
+  summary = $('meta[name=description]').attr('content')
+  {title, summary}

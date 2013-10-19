@@ -1,21 +1,34 @@
 <template name="postsShow">
 
   <div class="row">
-    <h3 class="col-sm-9">
+    <h3 class="col-xs-9">
       {{#each users}}
         {{> usersItem}}
       {{/each}}
     </h3>
 
-    <h3 class="col-sm-3 post--controls">
+    <h3 class="col-xs-3 post--controls">
       <a href="{{pathFor 'postsLike'}}" class="post--controls--control pull-right glyphicon {{subscriptionIcon}}"></a>
       <a href="{{pathFor 'postsShare'}}" class="post--controls--control pull-right glyphicon glyphicon-user"></a>
     </h3>
   </div>
 
   <h4 class="post--lead">
-    {{> postsPost}}
+    <div class="strong truncate">
+      {{title}}
+    </div>
   </h4>
+
+  {{#if summary}}
+    <blockquote>
+      {{summary}}
+    </blockquote>
+  {{/if}}
+
+    <a href="{{url}}" target="_blank" class="clickable-link">
+      Read more at {{uriHost url}} <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+
 
   <div class="post--comment-container">
     {{#each comments }}

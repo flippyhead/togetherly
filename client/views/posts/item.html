@@ -1,5 +1,5 @@
 <template name="postsItem">
-  <a href="{{pathFor 'postsShow'}}" class="list-group-item">
+  <a href="{{pathFor 'postsShow'}}" class="list-group-item no-link">
     <div class="post-content">
       <div class="row">
 
@@ -7,7 +7,7 @@
           {{> postsPost}}
         </div>
 
-        <div class="col-sm-4">
+        <div class="col-sm-4 truncate">
           <span class="pull-right">
             {{#each users}}
               {{> usersItem}}

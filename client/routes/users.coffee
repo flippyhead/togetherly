@@ -3,11 +3,6 @@ Router.map ->
   @route 'usersInvite',
     path: '/user/invite'
 
-  @route 'usersWelcome',
-    path: '/user/welcome'
-    data: ->
-      User.current()
-
   @route 'usersFriends',
     path: '/user/friends'
     waitOn: ->
