@@ -3,7 +3,10 @@ Router.map ->
   @route 'infoBookmarklet',
     path: '/info/bookmarklet'
 
-  @route 'infoGetStarted',
-    path: '/info/get-started'
+  @route 'infoJoin',
+    path: '/info/join'
+
+  @route 'infoHelp',
+    path: '/info/help'
     data: ->
       User.current()

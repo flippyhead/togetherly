@@ -1,14 +1,21 @@
 Router.map ->
 
-  @route 'postsIndex', path: '/posts'
-
-  @route 'postsFriends',
+  @route 'home',
     path: '/'
     data: ->
-      return {} unless userId = User.current()?.id
-      fids = _.pluck Dyad.where({userId}), 'friendId'
-      pids = _.pluck Subscription.where(userId: {$in: fids}), 'postId'
-      Post.find {_id: {$in: pids}}, sort: {createdAt: -1}
+      allPosts = Post.find {}, sort: {createdAt: -1}
+
+      if userId = User.current()?.id
+        fids = _.pluck Dyad.where({userId}), 'friendId'
+        pids = _.pluck Subscription.where(userId: {$in: fids}), 'postId'
+        friendsPosts = Post.find {_id: {$in: pids}}, sort: {createdAt: -1}
+
+      {allPosts, friendsPosts}
+
+  @route 'postsIndex',
+    path: '/posts'
+    data: ->
+      Post.find {}, sort: {createdAt: -1}
 
   @route 'postsSubmit',
     template: 'postsEdit'

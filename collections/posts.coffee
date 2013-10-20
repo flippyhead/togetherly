@@ -30,10 +30,10 @@ class @Post extends Minimongoid
       unless @find {url}
         Posts.insert {url, user_id: user._id}
 
-  @findByUserId: (id) ->
+  @findByUserId: (id, sort = {createdAt: -1}) ->
     subscriptions = Subscription.where userId: id
     ids = _.pluck subscriptions, 'postId'
-    Post.find _id: {$in: ids}
+    Post.find _id: {$in: ids}, {sort}
 
   @findOrCreateByUrl: (url, userId) ->
     url = cleanUrl url

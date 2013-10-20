@@ -8,3 +8,4 @@ Template.usersLoggedIn.events
 
       Meteor.logout (error) ->
         return alert(error.reason) if error
+        Router.go 'home'

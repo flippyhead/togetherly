@@ -8,14 +8,23 @@
       </a>
       <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
         <li role="presentation">
-          <a role="menuitem" tabindex="-1" href="{{pathFor 'infoGetStarted'}}">Get Started</a>
+          <a role="menuitem" tabindex="-1" href="{{pathFor 'infoHelp'}}">
+            <i class="glyphicon glyphicon-question-sign"></i>
+            Get Started
+          </a>
         </li>
         <li role="presentation">
-          <a role="menuitem" tabindex="-1" href="{{pathFor 'usersFriends'}}">Friends</a>
+          <a role="menuitem" tabindex="-1" href="{{pathFor 'usersFriends'}}">
+            <i class="glyphicon glyphicon-user"></i>
+            Friends
+          </a>
         </li>
         <li role="presentation" class="divider"></li>
         <li role="presentation">
-          <a data-ref="logout" role="menuitem" tabindex="-1" href="#">Logout</a>
+          <a data-ref="logout" role="menuitem" tabindex="-1" href="#">
+            <i class="glyphicon glyphicon-off"></i>
+            Logout
+          </a>
         </li>
       </ul>
     </li>

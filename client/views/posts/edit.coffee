@@ -9,6 +9,8 @@ Template.postsEdit.events
 
     Meteor.call 'postsCreate', {url, emails, comment, source}, (error, id) ->
       return alert(error.reason) if error
-      window.close() if source is 'b'
 
-    Router.go 'postsIndex'
+      if source is 'b'
+        window.close()
+      else
+        Router.go 'postsIndex'
