@@ -10,7 +10,23 @@ Template.postsEdit.events
     Meteor.call 'postsCreate', {url, emails, comment, source}, (error, id) ->
       return alert(error.reason) if error
 
-      if source is 'b'
+      if source is Post.sourceBookmarklet
         window.close()
       else
         Router.go 'postsIndex'
+
+Template.postsEdit.helpers
+  suggestBookmarklet: ->
+    @source is Post.sourceBookmarklet
+
+Template.postsEdit.settings = ->
+   position: "bottom"
+   limit: 5
+   rules: [
+     {
+       token: '@',
+       collection: User._collection,
+       field: "username",
+       template: Template.usersSuggestion
+     }
+   ]

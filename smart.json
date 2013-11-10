@@ -10,6 +10,7 @@
     "moment": {},
     "gravatar": {},
     "npm": {},
-    "handlebars-server": {}
+    "handlebars-server": {},
+    "autocomplete": {}
   }
 }

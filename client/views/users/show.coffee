@@ -16,3 +16,9 @@ Template.usersShow.helpers
       "control--state--on"
     else
       "control--state--off"
+
+Template.usersShow.events
+  'click [data-ref=follow]': (e) ->
+    e.preventDefault()
+    Meteor.call 'usersFollow', @_id, (error, id) ->
+      return alert(error.reason) if error

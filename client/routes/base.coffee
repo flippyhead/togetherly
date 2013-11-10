@@ -1,12 +1,16 @@
 Router.configure
-  layout: 'layout'
+
+  layoutTemplate: 'layout'
+
   notFoundTemplate: 'errors404'
+
   loadingTemplate: 'loading'
+
   before: ->
     return if Meteor.user() or
       _.include(['home', 'sessionsNew', 'usersNew',
         'postsIndex', 'postsShowWithAuth', 'infoJoin']
-      , @context.route.name)
+      , @route.name)
 
     if Meteor.loggingIn()
       @render 'loading'

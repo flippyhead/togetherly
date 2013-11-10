@@ -1,19 +1,25 @@
 if Post.find().count() is 0
   u1 = Accounts.createUser
-    firstName: 'Peter'
-    lastName: 'Brown'
+    username: 'ptb'
+    profile:
+      firstName: 'Peter'
+      lastName: 'Brown'
     email: 'p@ptb.io'
     password: 'password'
 
   u2 = Accounts.createUser
-    firstName: 'Rhienn'
-    lastName: 'Davis'
+    username: 'rhienn'
+    profile:
+      firstName: 'Rhienn'
+      lastName: 'Davis'
     email: 'rhienn@pathable.com'
     password: 'password'
 
   u3 = Accounts.createUser
-    firstName: 'Ryan'
-    lastName: 'Stouzer'
+    username: 'ryans'
+    profile:
+      firstName: 'Ryan'
+      lastName: 'Stouzer'
     email: 'rs@ptb.io'
     password: 'password'
 

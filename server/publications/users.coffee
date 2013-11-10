@@ -25,8 +25,24 @@ class UsersRelation extends PublicationRelation
       added: (user) =>
         @sub.added 'users', user._id, user
         @subscriptionsByUser user
-        @dyadsByUser user
+      removed: (user) =>
+        @sub.removed 'users', user._id
+
+  friends: (userId) ->
+    Meteor.users.find(_id: userId).observe
+      added: (user) =>
+        Dyad.find({userId: user._id}).observe
+          added: (dyad) =>
+            @sub.added 'dyads', dyad._id, dyad
+            @user dyad.friendId
+          removed: (dyad) =>
+            @sub.removed 'dyads', dyad._id
+
 
 Meteor.publish 'user', (id) ->
   (new UsersRelation @).user(id)
+  @ready()
+
+Meteor.publish 'friends', (userId) ->
+  (new UsersRelation @).friends(userId)
   @ready()

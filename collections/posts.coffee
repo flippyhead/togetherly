@@ -1,5 +1,8 @@
 class @Post extends Minimongoid
 
+  sourceBookmarklet: 'b'
+  sourceWeb: 'w'
+
   @_collection: new Meteor.Collection 'posts'
 
   @before_save: (attr) ->

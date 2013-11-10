@@ -2,6 +2,8 @@ Router.map ->
 
   @route 'home',
     path: '/'
+    waitOn: ->
+      [Meteor.subscribe('postsAll', 100), Meteor.subscribe('friendsPosts')]
     data: ->
       allPosts = Post.find {}, sort: {createdAt: -1}
 
@@ -14,6 +16,8 @@ Router.map ->
 
   @route 'postsIndex',
     path: '/posts'
+    waitOn: ->
+      Meteor.subscribe 'postsAll', 100
     data: ->
       Post.find {}, sort: {createdAt: -1}
 
@@ -21,13 +25,15 @@ Router.map ->
     template: 'postsEdit'
     path: '/posts/new/:url'
     data: ->
-      new Post(url: @params.url, source: 'b')
+      new Post(url: @params.url, source: Post.sourceBookmarklet)
 
   @route 'postsNew',
     template: 'postsEdit'
     path: '/posts/new'
+    waitOn: ->
+      Meteor.subscribe 'friends', User.current().id
     data: ->
-      new Post(source: 'w')
+      new Post(source: Post.sourceBookmarklet)
 
   @route 'postsEdit',
     path: '/posts/:_id/edit'
@@ -44,14 +50,9 @@ Router.map ->
   @route 'postsShare',
     path: '/posts/:_id/share'
     waitOn: ->
-      Meteor.subscribe 'post', @params._id
+      [Meteor.subscribe('post', @params._id), Meteor.subscribe('user', User.current().id)]
     data: ->
       Post.find @params._id
-
-  @route 'postsLike',
-    path: '/posts/:_id/like'
-    controller: 'PostsController'
-    action: 'subscribe'
 
   @route 'postsShowWithAuth',
     path: '/p/:_id/:resumeToken'
@@ -62,10 +63,6 @@ Router.map ->
 
 
 class @PostsController extends RouteController
-  subscribe: ->
-    Router.go 'postsShow', @params
-    Meteor.call 'postsSubscribe', @params._id, (error, id) ->
-      return alert(error.reason) if error
 
   authThenShow: ->
     Meteor.login @params.resumeToken, =>

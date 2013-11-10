@@ -12,7 +12,8 @@
       "moment": {},
       "gravatar": {},
       "npm": {},
-      "handlebars-server": {}
+      "handlebars-server": {},
+      "autocomplete": {}
     },
     "packages": {
       "bootstrap-3": {
@@ -27,8 +28,8 @@
       },
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
-        "tag": "v0.5.4",
-        "commit": "3e0e22ff85630b7503d0daa1538c6d90abb84020"
+        "tag": "v0.6.1",
+        "commit": "4e1ee0581d68bff422a915dacb0bd30eae10fe08"
       },
       "observatory": {
         "git": "https://github.com/jhoxray/observatory.git",
@@ -47,8 +48,8 @@
       },
       "minimongoid": {
         "git": "https://github.com/Exygy/minimongoid.git",
-        "tag": "v0.8.0",
-        "commit": "4f62f61ad5a34688e2b547dc843d76de4a254f7d"
+        "tag": "v0.8.3",
+        "commit": "8a4849426f1775f9886f303067e50877696fae43"
       },
       "moment": {
         "git": "https://github.com/acreeger/meteor-moment.git",
@@ -69,6 +70,11 @@
         "git": "https://github.com/EventedMind/meteor-handlebars-server.git",
         "tag": "v1.1.0",
         "commit": "ed99c8e9280894519f44a5b4c84f66ff596c5450"
+      },
+      "autocomplete": {
+        "git": "https://github.com/mizzao/meteor-autocomplete.git",
+        "tag": "v0.1.0",
+        "commit": "00a4adbba9811da9040e23531867d9ff03e2f445"
       },
       "observatory-apollo": {
         "git": "https://github.com/superstringsoftware/observatory-apollo.git",

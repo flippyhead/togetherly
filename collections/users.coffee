@@ -9,9 +9,17 @@ class @User extends Minimongoid
     return user if user = @first 'emails.address': email
     @first Accounts.createUser({email, password: 'eventually-randomly-generated'})
 
+  @findByUsername: (username) ->
+    @first username: username.match(/^\@*(.+)$/i)[1]
+
   sharePost: (emails, post, comment) ->
     _.each extractEmails(emails), (email) =>
-      friend = User.createByEmail email
+
+      friend = if /^\@/.test email
+        User.findByUsername email
+      else
+        User.createByEmail email
+
       friend.subscribe post
       @follow friend
 

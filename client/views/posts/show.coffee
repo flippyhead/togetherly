@@ -14,6 +14,11 @@ Template.postsShow.helpers
     Meteor.users.find _id: {$in: ids}
 
 Template.postsShow.events
+  'click [data-ref=like]': (e) ->
+    e.preventDefault()
+    Meteor.call 'postsSubscribe', @_id, (error, id) ->
+      return alert(error.reason) if error
+
   submit: (e) ->
     e.preventDefault()
 

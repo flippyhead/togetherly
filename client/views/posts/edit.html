@@ -1,4 +1,9 @@
 <template name="postsEdit">
+
+  <h3 class="text-center">
+    Share something!
+  </h3>
+
   <form role="form">
 
     <input type="hidden" name="source" value="{{source}}">
@@ -8,7 +13,7 @@
     </div>
 
     <div class="form-group">
-      <input type="text" class="form-control" name="emails" placeholder="Enter one or more email addresses"></input>
+      {{inputAutocomplete settings class="form-control" placeholder="Enter names or email addresses" name="emails"}}
     </div>
 
     <div class="form-group">
@@ -18,4 +23,11 @@
     <button type="submit" class="btn btn-success">Add Link</button>
 
   </form>
+
+  {{#if suggestBookmarklet}}
+    <p class="text-center text-muted">
+      Share things with ease: <a href="{{pathFor 'infoBookmarklet'}}">Add the Bookmarlet</a>
+    </p>
+  {{/if}}
+
 </template>

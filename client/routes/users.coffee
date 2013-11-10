@@ -6,13 +6,18 @@ Router.map ->
   @route 'usersFriends',
     path: '/user/friends'
     waitOn: ->
-      Meteor.subscribe 'user', User.current().id
+      Meteor.subscribe 'friends', User.current().id
     data: ->
-      fids = _.pluck Dyad.where(userId: User.current().id), 'friendId'
-      User.find _id: {$in: fids}
+      User.find {}, sort: {createdAt: -1}
 
   @route 'usersNew',
     path: '/users/new'
+
+  @route 'usersHome',
+    path: '/user'
+    template: 'home' # hack
+    onBeforeRun: ->
+      Router.go 'usersShow', _id: User.current().id
 
   @route 'usersShow',
     path: '/users/:_id'
@@ -20,11 +25,6 @@ Router.map ->
       Meteor.subscribe 'user', @params._id
     data: ->
       Meteor.users.findOne @params._id
-
-  @route 'usersFollow',
-    path: '/users/:_id/follow'
-    controller: 'UsersController'
-    action: 'follow'
 
   @route 'usersAuth',
     path: '/i/:resumeToken'
@@ -37,8 +37,3 @@ class @UsersController extends RouteController
   auth: ->
     Meteor.login @params.resumeToken, =>
       Router.go 'postsShow', @params
-
-  follow: ->
-    Router.go 'usersShow', @params
-    Meteor.call 'usersFollow', @params._id, (error, id) ->
-      return alert(error.reason) if error
