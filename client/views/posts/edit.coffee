@@ -17,7 +17,7 @@ Template.postsEdit.events
 
 Template.postsEdit.helpers
   suggestBookmarklet: ->
-    @source is Post.sourceBookmarklet
+    @source is Post.sourceWeb
 
 Template.postsEdit.settings = ->
    position: "bottom"

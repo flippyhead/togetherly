@@ -15,8 +15,7 @@ Router.map ->
 
   @route 'usersHome',
     path: '/user'
-    template: 'home' # hack
-    onBeforeRun: ->
+    before: ->
       Router.go 'usersShow', _id: User.current().id
 
   @route 'usersShow',
@@ -27,7 +26,7 @@ Router.map ->
       Meteor.users.findOne @params._id
 
   @route 'usersAuth',
-    path: '/i/:resumeToken'
+    path: '/u/:resumeToken'
     controller: 'UsersController'
     action: 'auth'
 
@@ -36,4 +35,4 @@ class @UsersController extends RouteController
 
   auth: ->
     Meteor.login @params.resumeToken, =>
-      Router.go 'postsShow', @params
+      Router.go 'home'

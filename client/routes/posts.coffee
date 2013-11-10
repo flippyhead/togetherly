@@ -24,6 +24,9 @@ Router.map ->
   @route 'postsSubmit',
     template: 'postsEdit'
     path: '/posts/new/:url'
+    layoutTemplate: 'blank'
+    waitOn: ->
+      Meteor.subscribe 'friends', User.current().id
     data: ->
       new Post(url: @params.url, source: Post.sourceBookmarklet)
 
@@ -33,7 +36,7 @@ Router.map ->
     waitOn: ->
       Meteor.subscribe 'friends', User.current().id
     data: ->
-      new Post(source: Post.sourceBookmarklet)
+      new Post(source: Post.sourceWeb)
 
   @route 'postsEdit',
     path: '/posts/:_id/edit'

@@ -5,6 +5,7 @@ class @Dyad extends Minimongoid
   validate: ->
     @error 'userId', 'userId is required.' unless @userId
     @error 'friendId', 'friendId is required.' unless @friendId
+    @error 'friendId', 'friendId cannot be the same as userId' if @userId is @friendId
 
   error_message: ->
     msg = ''

@@ -25,6 +25,7 @@ class UsersRelation extends PublicationRelation
       added: (user) =>
         @sub.added 'users', user._id, user
         @subscriptionsByUser user
+        @dyadsByUser user
       removed: (user) =>
         @sub.removed 'users', user._id
 

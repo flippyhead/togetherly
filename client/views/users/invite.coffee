@@ -13,4 +13,4 @@ Template.usersInvite.events
     Meteor.call 'usersInvite', emails, note, (error, id) ->
       return alert(error.reason) if error
 
-    Router.go 'home'
+    Router.go 'usersFriends'

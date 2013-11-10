@@ -1,3 +1,7 @@
 {
+  "public": {
+    "domain": "localhost:3000"
+  },
+  "env": "development",
   "root_path": "/Users/peterbrown/Development/togetherly"
 }

@@ -8,8 +8,11 @@ Router.configure
 
   before: ->
     return if Meteor.user() or
-      _.include(['home', 'sessionsNew', 'usersNew',
-        'postsIndex', 'postsShowWithAuth', 'infoJoin']
+      _.include([
+        'home', 'sessionsNew',
+        'usersNew', 'usersAuth', 'infoJoin',
+        'postsIndex', 'postsShowWithAuth'
+      ]
       , @route.name)
 
     if Meteor.loggingIn()

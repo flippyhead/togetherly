@@ -50,12 +50,12 @@ class @User extends Minimongoid
         textAttributes = {
           note
           salutation: user.name()
-          authorizedPostUrl: user.authorizedPostUrl(post)
+          authorizedPostUrl: user.authorizedUrl()
         }
 
         Email.send
-          to: email
-          subject: "#{@name()} has shared something with you."
+          to: user.email()
+          subject: "#{user.name()} has shared something with you."
           html: Handlebars.templates['share-notification'](textAttributes)
 
   email: ->
