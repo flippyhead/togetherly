@@ -10,3 +10,6 @@ Router.map ->
     path: '/info/help'
     data: ->
       User.current()
+
+  @route 'infoStart',
+    path: '/start'

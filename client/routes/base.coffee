@@ -10,7 +10,7 @@ Router.configure
     return if Meteor.user() or
       _.include([
         'home', 'sessionsNew',
-        'usersNew', 'usersAuth', 'infoJoin',
+        'usersNew', 'usersAuth', 'infoJoin', 'infoStart',
         'postsIndex', 'postsShowWithAuth'
       ]
       , @route.name)

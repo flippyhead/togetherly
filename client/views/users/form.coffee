@@ -10,4 +10,4 @@ Template.usersForm.events
 
     Accounts.createUser options, (error) ->
       alert(error) if error
-      Router.go 'usersWelcome'
+      Router.go 'usersInvite'

@@ -2,17 +2,18 @@ Router.map ->
 
   @route 'home',
     path: '/'
+    after: ->
+      if User.current()
+        Router.go 'postsMy'
+      else
+        Router.go 'infoStart'
+
+  @route 'postsMy',
+    path: '/posts/my'
     waitOn: ->
-      [Meteor.subscribe('postsAll', 100), Meteor.subscribe('friendsPosts')]
+      Meteor.subscribe 'friendsPosts'
     data: ->
-      allPosts = Post.find {}, sort: {createdAt: -1}
-
-      if userId = User.current()?.id
-        fids = _.pluck Dyad.where({userId}), 'friendId'
-        pids = _.pluck Subscription.where(userId: {$in: fids}), 'postId'
-        friendsPosts = Post.find {_id: {$in: pids}}, sort: {createdAt: -1}
-
-      {allPosts, friendsPosts}
+      Post.find()
 
   @route 'postsIndex',
     path: '/posts'
