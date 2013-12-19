@@ -1,9 +1,11 @@
 class PostsRelation extends PublicationRelation
 
   user: (id) ->
-    Meteor.users.find({_id: id}).observe
+    user = Meteor.users.find({_id: id})
+    user.observe
       added: (user) =>
         @sub.added 'users', user._id, user
+    user
 
   commentsByPost: (post) ->
     Comment.find({postId: post._id}).observe
@@ -40,27 +42,27 @@ class PostsRelation extends PublicationRelation
       changed: (post) =>
         @sub.changed 'posts', post._id, post
 
-  subscriptionsByUser: (user) ->
+  subscriptionsByUser: (user, limit = 999) ->
     Subscription.find({userId: user._id}).observe
       added: (subscription) =>
         @sub.added 'subscriptions', subscription._id, subscription
-        @postsBySubscription subscription
+        @postsBySubscription subscription, limit
       removed: (subscription) =>
         @removed 'subscriptions', subscription._id
 
-  postsBySubscription: (subscription) ->
-    Post.find(_id: subscription.postId).observe
+  postsBySubscription: (subscription, limit = 999) ->
+    Post.find({_id: subscription.postId}, {limit}).observe
       added: (post) =>
         @sub.added 'posts', post._id, post
       removed: (post) =>
         @sub.removed 'posts', post._id
 
-  friendsPosts: ->
+  friendsPosts: (limit) ->
     Dyad.find({userId: @sub.userId}).observe
       added: (dyad) =>
         @sub.added 'dyads', dyad._id, dyad
         friend = @user dyad.friendId
-        @subscriptionsByUser friend
+        @subscriptionsByUser friend, limit
       removed: (dyad) =>
         @sub.removed 'dyads', dyad._id
 
@@ -73,6 +75,6 @@ Meteor.publish 'post', (id) ->
   (new PostsRelation @).post(id)
   @ready()
 
-Meteor.publish 'friendsPosts', ->
-  (new PostsRelation @).friendsPosts()
+Meteor.publish 'friendsPosts', (limit) ->
+  (new PostsRelation @).friendsPosts(limit)
   @ready()
