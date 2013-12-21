@@ -11,7 +11,7 @@ Router.map ->
   @route 'postsMy',
     path: '/posts/my'
     waitOn: ->
-      Meteor.subscribe 'friendsPosts'
+      Meteor.subscribe 'friendsPosts', 99
     data: ->
       Post.find {}, sort: {createdAt: -1}
 

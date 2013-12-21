@@ -1,7 +1,11 @@
 {
   "public": {
-    "domain": "togetherly.org"
+    "domain": "togetherly.org",
+    "email": {
+      "fromAddress": "peter@togetherly.mailgun.org"
+    }
   },
   "env": "production",
-  "root_path": "/Users/peterbrown/Development/togetherly"
+  "root_path": "/Users/peterbrown/Development/togetherly",
+  "MAIL_URL":"smtp://postmaster%40togetherly.mailgun.org:3d9qjws57gz0@smtp.mailgun.org:587"
 }

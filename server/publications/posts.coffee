@@ -57,7 +57,7 @@ class PostsRelation extends PublicationRelation
       removed: (post) =>
         @sub.removed 'posts', post._id
 
-  friendsPosts: (limit) ->
+  friendsPosts: (limit = 99) ->
     Dyad.find({userId: @sub.userId}).observe
       added: (dyad) =>
         @sub.added 'dyads', dyad._id, dyad

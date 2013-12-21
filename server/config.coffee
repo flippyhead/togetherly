@@ -10,4 +10,4 @@ Meteor.startup ->
   Meteor.settings.env ?= 'development'
 
   if Meteor.settings.env is 'production'
-    process.env.MAIL_URL = 'smtp://postmaster%40togetherly.mailgun.org:3d9qjws57gz0@smtp.mailgun.org:587'
+    process.env.MAIL_URL = Meteor.settings.MAIL_URL
