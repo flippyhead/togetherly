@@ -1,12 +1,17 @@
 <template name="usersFriends">
 
-  <h4 class="text-center friends--title">
+  <h3 class="text-center friends--title">
     You've got {{count}} friends.
-    <a href="{{pathFor 'usersInvite'}}" class="clickable-link">Invite more</a>
-  </h4>
+  </h3>
 
-  {{#each this}}
-    {{> usersUser}}
-  {{/each}}
+  <div class="container">
+    {{#each this}}
+      {{> usersUser}}
+    {{/each}}
+  </div>
+
+  <h4 class="text-center block">
+    To invite others: <a href="{{pathFor 'postsNew'}}" class="clickable-link">share something</a>.
+  </h4>
 
 </template>

@@ -10,3 +10,15 @@ Template.postsShare.events
       return alert(error.reason) if error
 
     Router.go 'postsShow', _id: postId
+
+Template.postsShare.settings = ->
+   position: "bottom"
+   limit: 5
+   rules: [
+     {
+       token: '@',
+       collection: User._collection,
+       field: "username",
+       template: Template.usersSuggestion
+     }
+   ]

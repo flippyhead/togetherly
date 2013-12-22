@@ -16,7 +16,7 @@ class @Post extends Minimongoid
     attr
 
   @after_create: (post) ->
-    if Meteor.isServer
+    if Meteor.isServer and post.isValid()
       HTTP.get post.url, (error, result) =>
         if error
           console.log error
@@ -58,8 +58,11 @@ class @Post extends Minimongoid
     msg
 
   validate: ->
-    @error 'url', 'URL is required.' if _.isEmpty @url
-    @error 'url', 'URL must be valid.' unless validateURL @url
+    if _.isEmpty(@url) or @url is 'http://'
+      @error 'url', 'URL is required.'
+
+    unless validateURL @url
+      @error 'url', 'URL must be valid.'
 
 
 @Post._collection.allow

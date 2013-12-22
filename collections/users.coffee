@@ -34,7 +34,7 @@ class @User extends Minimongoid
         }
 
         Email.send
-          from: Meteor.settings.public.email.fromAddress
+          from: Meteor.settings.public?.email.fromAddress
           to: friend.email()
           subject: "#{@name()} has shared something with you."
           html: Handlebars.templates['share-notification'](textAttributes)
