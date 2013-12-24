@@ -41,7 +41,7 @@ class PostsRelation extends PublicationRelation
         @sub.changed 'posts', post._id, post
 
   subscriptionsByUser: (user, limit = 999) ->
-    Subscription.find({userId: user._id}).observe
+    Subscription.find({userId: user._id}, {limit}).observe
       added: (subscription) =>
         @sub.added 'subscriptions', subscription._id, subscription
         @postsBySubscription subscription, limit
@@ -55,8 +55,8 @@ class PostsRelation extends PublicationRelation
       removed: (post) =>
         @sub.removed 'posts', post._id
 
-  friendsPosts: (limit = 99) ->
-    Dyad.find({userId: @sub.userId}).observe
+  friendsPosts: (limit = 999) ->
+    Dyad.find({userId: @sub.userId}, {limit}).observe
       added: (dyad) =>
         @sub.added 'dyads', dyad._id, dyad
         @user dyad.friendId
