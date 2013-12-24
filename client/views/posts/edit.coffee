@@ -13,7 +13,7 @@ Template.postsEdit.events
       if source is Post.sourceBookmarklet
         window.close()
       else
-        Router.go 'postsIndex'
+        Router.go 'postsMy'
 
 Template.postsEdit.helpers
   suggestBookmarklet: ->

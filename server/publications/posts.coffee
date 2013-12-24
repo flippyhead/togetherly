@@ -1,11 +1,9 @@
 class PostsRelation extends PublicationRelation
 
   user: (id) ->
-    user = Meteor.users.find({_id: id})
-    user.observe
+    Meteor.users.find({_id: id}).observe
       added: (user) =>
         @sub.added 'users', user._id, user
-    user
 
   commentsByPost: (post) ->
     Comment.find({postId: post._id}).observe
@@ -61,7 +59,8 @@ class PostsRelation extends PublicationRelation
     Dyad.find({userId: @sub.userId}).observe
       added: (dyad) =>
         @sub.added 'dyads', dyad._id, dyad
-        friend = @user dyad.friendId
+        @user dyad.friendId
+        friend = Meteor.users.findOne({_id: dyad.friendId})
         @subscriptionsByUser friend, limit
       removed: (dyad) =>
         @sub.removed 'dyads', dyad._id
